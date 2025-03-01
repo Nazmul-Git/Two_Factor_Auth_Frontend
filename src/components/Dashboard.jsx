@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import TaskForm from "./TaskForm";
@@ -38,15 +37,23 @@ const Dashboard = () => {
     }
   };
 
-  //  logout
+  // Logout 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/"); 
   };
+
+  useEffect(() => {
+    if (showForm) {
+      // Focus on the form when it's shown
+      const formElement = document.getElementById("task-form");
+      if (formElement) formElement.focus();
+    }
+  }, [showForm]);
 
   return (
     <Container maxWidth="md">
-      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+      <Box display="flex" flexDirection="column" alignItems="center" mt={4} >
         <Paper elevation={0} sx={{ padding: 4, width: "100%", textAlign: "center" }}>
           <Typography variant="h4" gutterBottom>
             Dashboard
@@ -57,7 +64,7 @@ const Dashboard = () => {
             variant="contained"
             color="secondary"
             onClick={handleLogout}
-            sx={{ mb: 2, ml: 2 }}
+            sx={{ mb: 2, ml: 2, mr:2}}
           >
             Logout
           </Button>
@@ -70,8 +77,12 @@ const Dashboard = () => {
           >
             {showForm ? "Hide Form" : "Add Task"}
           </Button>
-          {showForm && <TaskForm onSubmit={handleAddTask} />}
+
+          <div id="task-form-container" aria-hidden={!showForm} inert={!showForm}>
+            {showForm && <TaskForm onSubmit={handleAddTask} />}
+          </div>
         </Paper>
+
         <Paper elevation={0} sx={{ padding: 4, width: "100%", marginTop: 3 }}>
           <Typography variant="h5" gutterBottom>
             Task List
