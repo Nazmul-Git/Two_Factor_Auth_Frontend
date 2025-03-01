@@ -15,7 +15,6 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -25,16 +24,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const API_URL = import.meta.env.VITE_API_URL ;
-  
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       navigate('/dashboard');
     }
   }, [navigate]);
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -57,34 +55,7 @@ const Login = () => {
     }
   };
 
-  // const handleGoogleLogin = async (response) => {
-  //   if (response.error) {
-  //     setError('Google login failed. Please try again.');
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   setError('');
-
-  //   try {
-  //     const { credential } = response; // Google ID token
-  //     const res = await axios.post(`${API_URL}/auth/google-login`, { tokenId: credential });
-
-  //     if (res.data.requires2FA) {
-  //       navigate('/verify-2fa', { state: { email: res.data.email } });
-  //     } else {
-  //       localStorage.setItem('token', res.data.token);
-  //       navigate('/dashboard');
-  //     }
-  //   } catch (error) {
-  //     setError(error.response?.data?.error || 'Google login failed. Please try again.');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <Container
         maxWidth="xs"
         sx={{
@@ -206,19 +177,8 @@ const Login = () => {
               </Grid>
             </Grid>
           </form>
-
-          {/* Google Login Button */}
-          {/* <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={12}>
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() => setError('Google login failed. Please try again.')}
-              />
-            </Grid>
-          </Grid> */}
         </Box>
       </Container>
-    </GoogleOAuthProvider>
   );
 };
 
